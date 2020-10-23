@@ -12,7 +12,6 @@ provider "libvirt" {
   alias = "vmhost01"
   uri   = "qemu+ssh://jenkins_automation@vmhost01/system?keyfile=../id_ed25519_jenkins"
   // uri   = "qemu+ssh://vmhost01/system"
-
 }
 
 variable "env" {
@@ -21,7 +20,7 @@ variable "env" {
 
 resource "libvirt_volume" "jenkins" {
   provider         = libvirt.vmhost01
-  name             = "jenkins-${var.env}.qcow2"
+  name             = "jenkins_${var.env}.qcow2"
   pool             = var.env
   base_volume_name = "jenkins_base.qcow2"
   format           = "qcow2"
@@ -30,7 +29,7 @@ resource "libvirt_volume" "jenkins" {
 
 resource "libvirt_domain" "jenkins" {
   provider  = libvirt.vmhost01
-  name      = "jenkins-${var.env}"
+  name      = "jenkins_${var.env}"
   memory    = "1536"
   vcpu      = 1
   autostart = true
@@ -39,7 +38,7 @@ resource "libvirt_domain" "jenkins" {
   network_interface {
     macvtap  = "enp0s25"
     mac      = "52:54:00:EA:17:55"
-    hostname = "jenkins-${var.env}"
+    hostname = "jenkins_${var.env}"
   }
 
   network_interface {
