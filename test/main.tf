@@ -10,8 +10,8 @@ terraform {
 
 provider "libvirt" {
   alias = "vmhost01"
-  uri   = "qemu+ssh://jenkins_automation@vmhost01/system?keyfile=../id_ed25519_jenkins"
-  // uri   = "qemu+ssh://vmhost01/system"
+  // uri   = "qemu+ssh://jenkins_automation@vmhost01/system?keyfile=../id_ed25519_jenkins"
+  uri   = "qemu+ssh://vmhost01/system"
 }
 
 variable "env" {
@@ -30,8 +30,8 @@ resource "libvirt_volume" "jenkins" {
 resource "libvirt_domain" "jenkins" {
   provider  = libvirt.vmhost01
   name      = "jenkins_${var.env}"
-  memory    = "1536"
-  vcpu      = 1
+  memory    = "512"
+  vcpu      = 2
   autostart = true
 
   // The MAC here is given an IP through mikrotik
