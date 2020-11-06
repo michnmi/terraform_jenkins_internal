@@ -30,7 +30,7 @@ resource "libvirt_volume" "jenkins" {
 resource "libvirt_domain" "jenkins" {
   provider  = libvirt.vmhost01
   name      = "jenkins_${var.env}"
-  memory    = "512"
+  memory    = "1024"
   vcpu      = 2
   autostart = true
 
