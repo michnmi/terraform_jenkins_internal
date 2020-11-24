@@ -14,12 +14,18 @@ provider "libvirt" {
   uri   = "qemu+ssh://vmhost01/system"
 }
 
+provider "libvirt" {
+  alias = "vmhost02"
+  // uri   = "qemu+ssh://jenkins_automation@vmhost02/system?keyfile=../id_ed25519_jenkins"
+  uri   = "qemu+ssh://vmhost02/system"
+}
+
 variable "env" {
   type = string
 }
 
 resource "libvirt_volume" "jenkins" {
-  provider         = libvirt.vmhost01
+  provider         = libvirt.vmhost02
   name             = "jenkins_${var.env}.qcow2"
   pool             = var.env
   base_volume_name = "jenkins_base.qcow2"
@@ -28,15 +34,15 @@ resource "libvirt_volume" "jenkins" {
 }
 
 resource "libvirt_domain" "jenkins" {
-  provider  = libvirt.vmhost01
+  provider  = libvirt.vmhost02
   name      = "jenkins_${var.env}"
-  memory    = "1024"
+  memory    = "1536"
   vcpu      = 2
   autostart = true
 
   // The MAC here is given an IP through mikrotik
   network_interface {
-    macvtap  = "enp0s25"
+    macvtap  = "enp3s0"
     mac      = "52:54:00:EA:17:55"
     hostname = "jenkins_${var.env}"
   }
