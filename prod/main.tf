@@ -31,7 +31,7 @@ variable "env" {
 }
 
 resource "libvirt_volume" "jenkins" {
-  provider         = libvirt.vmhost01
+  provider         = libvirt.vmhost03
   name             = "jenkins-${var.env}.qcow2"
   pool             = var.env
   base_volume_name = "jenkins-base.qcow2"
@@ -40,16 +40,16 @@ resource "libvirt_volume" "jenkins" {
 }
 
 resource "libvirt_domain" "jenkins" {
-  provider  = libvirt.vmhost01
+  provider  = libvirt.vmhost03
   name      = "jenkins-${var.env}"
-  memory    = "1024"
-  vcpu      = 2
+  memory    = "4096"
+  vcpu      = 4
   autostart = true
 
   // The MAC here is given an IP through mikrotik
   network_interface {
-    macvtap  = "enp0s25"
-    mac      = "52:54:00:EA:17:55"
+    macvtap  = "enp1s0"
+    mac      = "52:54:00:EA:18:55"
     hostname = "jenkins-${var.env}"
   }
 
