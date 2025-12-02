@@ -3,7 +3,7 @@ terraform {
   required_providers {
     libvirt = {
       source  = "dmacvicar/libvirt"
-      version = ">= 0.6"
+      version = "~> 0.8.3"
     }
   }
 }
@@ -11,7 +11,7 @@ terraform {
 provider "libvirt" {
   alias = "vmhost01"
   uri   = "qemu+ssh://jenkins_automation@vmhost01/system?keyfile=../id_ed25519_jenkins"
-  # uri   = "qemu+ssh://vmhost01/system"
+  # uri = "qemu+ssh://vmhost01/system"
 }
 
 provider "libvirt" {
@@ -42,9 +42,13 @@ resource "libvirt_volume" "jenkins" {
 resource "libvirt_domain" "jenkins" {
   provider  = libvirt.vmhost01
   name      = "jenkins-${var.env}"
-  memory    = "1024"
+  memory    = "1536"
   vcpu      = 2
   autostart = true
+
+  cpu {
+    mode = "host-passthrough"
+  }
 
   // The MAC here is given an IP through mikrotik
   network_interface {
